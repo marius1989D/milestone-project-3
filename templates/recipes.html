@@ -1,39 +1,39 @@
 {% extends 'base.html' %} {% block content %}
 <h3>All Recipes</h3>
-
-<div class="row">
-    <ul class="collapsible">
-        {% for recipe in recipes %}
-        <li>
-            <div class="collapsible-header">
-                <div class="col s9">
-                    <i class="material-icons">expand_more</i>
-                    <strong>{{recipe.recipe_name}}</strong> - {{ recipe.recipe_category }} Cusine - <strong> {{recipe.recipe_time}} </strong>
+<div class="container">
+    <div class="row">
+        <ul class="collapsible">
+            {% for recipe in recipes %}
+            <li>
+                <div class="collapsible-header">
+                    <div class="col s9">
+                        <i class="material-icons">expand_more</i>
+                        <strong>{{recipe.recipe_name}}</strong> - {{ recipe.recipe_category }} Cusine - <strong> {{recipe.recipe_time}} </strong>
+                    </div>
+                    <div class="col s3">
+                        <a href="#" class="waves-effect waves-light btn btn_edit"><i class="material-icons left">edit</i>Edit</a>
+                        <a href="#" class="waves-effect waves-light btn btn_delete"><i class="material-icons deleteIcon">delete_forever</i></a>
+                    </div>
                 </div>
-                <div class="col s3">
-                    <a href="#" class="waves-effect waves-light btn btn_edit"><i class="material-icons left">edit</i>Edit</a>
-                    <a href="#" class="waves-effect waves-light btn btn_delete"><i class="material-icons deleteIcon">delete_forever</i></a>
+
+
+                <div class="collapsible-body">
+                    <ul class="collapsible" data-collapsible="expandable">
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">local_grocery_store</i>Ingredients</div>
+                            <div class="collapsible-body"><span>{{recipe.recipe_ingredients}}</span></div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">format_list_numbered</i>Method</div>
+                            <div class="collapsible-body"><span>{{recipe.recipe_method}}</span></div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-
-
-            <div class="collapsible-body">
-                <ul class="collapsible" data-collapsible="expandable">
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">local_grocery_store</i>Ingredients</div>
-                        <div class="collapsible-body"><span>{{recipe.recipe_ingredients}}</span></div>
-                    </li>
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">format_list_numbered</i>Method</div>
-                        <div class="collapsible-body"><span>{{recipe.recipe_method}}</span></div>
-                    </li>
-                </ul>
-            </div>
-        </li>
-    {% endfor %}
-    </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 
 
 {% endblock %}
-
