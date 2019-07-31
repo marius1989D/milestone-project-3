@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% block content %}
+
+<h3>Edit Recipe</h3>
+<div class="row">
+    <form action="{{ url_for('edit_recipe', recipe_id=recipe._id) }}" method="POST" class="col s12">
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="material-icons prefix">local_grocery_store</i>
+                <textarea id="recipe_category" name="recipe_category" id="recipe_category" class="materialize-textarea" required>{{recipe.recipe_category}}</textarea>
+                <label for="icon_telephone">Category</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">local_dining</i>
+                <input id="recipe_name" name="recipe_name" id="recipe_name" type="text" class="validate" value="{{recipe.recipe_name}}" required>
+                <label for="icon_prefix">Recipe Name</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">local_grocery_store</i>
+                <textarea id="recipe_ingredients" name="recipe_ingredients" id="recipe_ingredients" class="materialize-textarea" required>{{recipe.recipe_ingredients}}</textarea>
+                <label for="icon_telephone">Ingredients</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">format_list_numbered</i>
+                <textarea name="recipe_method" id="recipe_method" class="materialize-textarea" required>{{recipe.recipe_method}}</textarea>
+                <label for="icon_telephone">Method</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">alarm</i>
+                <input id="recipe_time" name="recipe_time" id="recipe_time" type="tel" class="validate" {{recipe.recipe_time}} required>
+                <label for="icon_telephone">Cook time</label>
+            </div>
+        </div>
+        <div class="row">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Update Recipe
+                <i class="material-icons right">send</i>
+            </button>
+            <a href="{{ url_for('get_recipe') }}" class="waves-effect waves-light btn cancel_button">
+                <i class="material-icons right">cancel</i>Cancel
+            </a>
+        </div>
+
+
+
+    </form>
+</div>
+
+
+
+{% endblock %}

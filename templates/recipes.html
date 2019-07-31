@@ -11,7 +11,7 @@
                         <strong>{{recipe.recipe_name}}</strong> - {{ recipe.recipe_category }} Cusine - <strong> {{recipe.recipe_time}} </strong>
                     </div>
                     <div class="col s3">
-                        <a href="#" class="waves-effect waves-light btn btn_edit"><i class="material-icons left">edit</i>Edit</a>
+                        <a href="{{url_for('edit_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn btn_edit"><i class="material-icons left">edit</i>Edit</a>
                         <a href="#" class="waves-effect waves-light btn btn_delete"><i class="material-icons deleteIcon">delete_forever</i></a>
                     </div>
                 </div>
