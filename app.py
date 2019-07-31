@@ -43,7 +43,7 @@ def update_recipe(recipe_id):
         'recipe_method' : request.form.get('recipe_method'),
         'recipe_time' : request.form.get('metrecipe_timehod')
     })
-    return redirect(url_for('get_recipes'))
+    return redirect(url_for('get_recipe'))
     
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
