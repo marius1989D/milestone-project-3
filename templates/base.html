@@ -13,6 +13,36 @@
 </head>
 
 <body>
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                <a href="#" class="brand-logo">Page Title</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a class="waves-effect" href="#">Home</a></li>
+                    <li><a class="waves-effect" href="#">About us</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <ul class="side-nav" id="mobile-demo">
+        <li>
+            <a href="##">
+                <center>MENU</center>
+            </a>
+        </li>
+        <li><a class="waves-effect" href="#!">Home</a></li>
+        <li><a class="waves-effect" href="#!">About us</a></li>
+    </ul>
+
+
+
+
+
+
+
+
+
     <h1>Tasty Things</h1>
 
 
@@ -22,8 +52,13 @@
         $(document).ready(function() {
             $('.collapsible').collapsible();
             $('select').material_select();
+            
+            $('.button-collapse').sideNav({
+                closeOnClick: true
+            });
         });
     </script>
+    <script type="text/javascript" src="http://materializecss.com/templates/starter-template/js/init.js"></script>
     {% block content %} {% endblock %}
 </body>
 
