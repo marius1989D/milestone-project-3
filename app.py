@@ -3,8 +3,13 @@ from flask import Flask, render_template, redirect, request, url_for
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
+from forms import RegistrationForm, LoginForm
+
+
+
 app = Flask(__name__)
 
+app.config["SECRET_KEY"] = '4f1421d2299968b6e9ce128fa0ec1048'
 app.config["MONGO_DBNAME"] = 'cooking_recipes'
 app.config["MONGO_URI"] = 'mongodb+srv://root:r00tUser@myfirstcluster-rffnv.mongodb.net/cooking_recipes?retryWrites=true&w=majority'
 
@@ -48,7 +53,17 @@ def update_recipe(recipe_id):
 @app.route('/delete_recipe/<recipe_id>')
 def delete_recipe(recipe_id):
     mongo.db.recipes.remove({'_id': ObjectId(recipe_id)})
-    return redirect(url_for('get_recipe'))
+    return redirect
+    
+@app.route('/register')
+def register():
+    form = RegistrationForm()
+    return render_template('register.html', title='Register', form=form)
+    
+@app.route('/login')
+def login():
+    form = LoginForm()
+    return render_template('login.html', title='Login', form=form)
     
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
