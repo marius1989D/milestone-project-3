@@ -53,19 +53,25 @@ def update_recipe(recipe_id):
 @app.route('/delete_recipe/<recipe_id>')
 def delete_recipe(recipe_id):
     mongo.db.recipes.remove({'_id': ObjectId(recipe_id)})
-    return redirect
+    return redirect(url_for('get_recipe'))
     
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'validate')
+        flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('get_recipe'))
     return render_template('register.html', title='Register', form=form)
     
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'admin@blog.com' and form.password.data == 'pass':
+            flash('You have been logged in!', 'success')
+            return redirect(url_for('get_recipe'))
+        else:
+            flash('Loggin Unsuccessful! Please check username and password.', 'danger')
     return render_template('login.html', title='Login', form=form)
     
 if __name__ == '__main__':

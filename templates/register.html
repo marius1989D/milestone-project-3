@@ -1,17 +1,17 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
-    <div class="content-section">
+    
+<div class="content-section">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend>Join Now</legend>
+                <legend class="border-bottom mb-4">Join Now</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
-                    
+
                     {% if form.username.errors %}
                         {{ form.username(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -22,10 +22,9 @@
                     {% else %}
                         {{ form.username(class="form-control form-control-lg") }}
                     {% endif %}
-                    
                 </div>
                 <div class="form-group">
-                    {{ form.email.label }}
+                    {{ form.email.label(class="form-control-label") }}
                     {% if form.email.errors %}
                         {{ form.email(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -38,7 +37,7 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    {{ form.password.label }}
+                    {{ form.password.label(class="form-control-label") }}
                     {% if form.password.errors %}
                         {{ form.password(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -51,7 +50,7 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    {{ form.confirm_password.label }}
+                    {{ form.confirm_password.label(class="form-control-label") }}
                     {% if form.confirm_password.errors %}
                         {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -63,15 +62,15 @@
                         {{ form.confirm_password(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="input-field">
-                    {{ form.submit(class="btn waves-effect waves-light") }}
-                </div>
             </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
         </form>
     </div>
-    <div class="row">
-        <small>
-            Already have an account? <a href="{{  url_for('login') }}">Sign In</a>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
         </small>
     </div>
 
