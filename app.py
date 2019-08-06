@@ -2,13 +2,16 @@ import os
 from flask import Flask, render_template, redirect, request, url_for, flash, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from flask_mongoengine import MongoEngine, Document
 from werkzeug.urls import url_parse
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required, UserMixin 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from werkzeug.security import generate_password_hash, check_password_hash
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from flask_bcrypt import Bcrypt
+
 
 
 
@@ -22,67 +25,75 @@ app.config["SECRET_KEY"] = '4f1421d2299968b6e9ce128fa0ec1048'
 
 
 mongo = PyMongo(app)
-db = 'mongodb+srv://root:r00tUser@myfirstcluster-rffnv.mongodb.net/cooking_recipes?retryWrites=true&w=majority'
+db = MongoEngine(app)
+bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
-
-
-#+++++++++++++++++++++++++
-
-
+class User(UserMixin, db.Document):
+    meta = {'collection': 'users'}
+    username = db.StringField(max_length=15)
+    email = db.StringField(max_length=30)
+    password = db.StringField()
+    
+@login_manager.user_loader
+def load_user(user_id):
+    return User.objects(pk=user_id).first()
+    
+    
 class RegistrationForm(FlaskForm):
-    username = db.StringField('Username', validators=[DataRequired()])
-    email = db.StringField('Email', validators=[DataRequired(), Email()])
+    username = StringField('Username',
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
-
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Sign Up')
+    
     def validate_username(self, username):
-        user = User.objects(username=username.data).first()
-        if user is not None:
-            raise ValidationError('Please use a different username.')
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('That username is taken. Please choose a different one.')
 
     def validate_email(self, email):
-        user = User.objects(email=email.data).first()
-        if user is not None:
-            raise ValidationError('Please use a different email address.')
-    
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('That email is taken. Please choose a different one.')
+
+
 class LoginForm(FlaskForm):
-    username = db.StringField('Username', validators=[DataRequired()])
-    email = db.StringField('Email address', validators=[DataRequired()])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
+    
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('get_recipe'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        user.insert_one(request.form.to_dict())
+        flash('Your account has been created! You are now able to log in', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
 
-    def validate_username(self, username):
-        form = LoginForm()
-        user = User.objects(username=username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            raise ValidationError('Invalid username or password')
-            
-            
-class User(UserMixin):
-    username = mongo.StringField(max_length=64)
-    email = mongo.StringField(max_length=120)
-    password_hash = mongo.StringField(max_length=128)
-
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-
-@login.user_loader
-def load_user(user_id):
-    return User.objects(id=user_id).first()
-
-
-#++++++++++++++++++++++++++
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated == True:
+        return redirect(url_for('get_recipe'))
+    form = RegistrationForm()
+    if request.method == 'POST':
+        if form.validate():
+            check_user = User.objects(email=form.email.data).first()
+            if check_user:
+                if check_password_hash(check_user['password'], form.password.data):
+                    login_user(check_user)
+                    return redirect(url_for('get_recipe'))
+    return render_template('login.html', form=form)
 
 
 @app.route('/')
@@ -125,37 +136,8 @@ def delete_recipe(recipe_id):
     mongo.db.recipes.remove({'_id': ObjectId(recipe_id)})
     return redirect(url_for('get_recipe'))
     
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
-        user.save()
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+
     
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.objects(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            return redirect(url_for('login'))
-
-        login_user(user, remember=form.remember_me.data)
-
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('home')
-        return redirect(next_page)
-
-    return render_template('login.html', form=form)
 
 
 @app.route('/logout')
@@ -165,7 +147,7 @@ def logout():
 
 
     
-    
+
 
 
     
@@ -173,3 +155,4 @@ if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
         port=int(os.environ.get('PORT')),
         debug=True)
+        

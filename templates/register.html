@@ -1,44 +1,20 @@
 {% extends "base.html" %} {% block content %}
 
-<form class="form-signin" action="/register" method="post">
-      {{ form.hidden_tag() }}
+<h1>Register</h1>
+<form action="/register" method="post">
+  <p>Username</p>
+  {{ form.username }}
+  <p>Email</p>
+  {{ form.email }}
+  <p>Password</p>
+  {{ form.password }}
+  {{ form.hidden_tag() }}
+  <p>Confirm Password</p>
+  {{ form.confirm_password }}
+  {{ form.hidden_tag() }}
+  <br>
+  <br>
+  <input type="submit" value="Submit">
+</form>
 
-      <label for="inputUsername" class="sr-only">Username</label>
-      <input type="text" name="username" id="username" class="form-control" placeholder="Username" required autofocus>
-
-      <label for="inputEmail" class="sr-only">Email</label>
-      <input type="text" name="email" id="email" class="form-control" placeholder="Email address" required autofocus>
-
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-
-      <label for="inputPassword2" class="sr-only">Repeat Password</label>
-      <input type="password" id="password2" name="password2" class="form-control" placeholder="Password" required>
-
-      {% for error in form.username.errors %}
-          <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-
-      </br>
-
-      {% for error in form.email.errors %}
-          <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-
-      </br>
-
-      {% for error in form.password.errors %}
-          <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-
-      {% for error in form.password2.errors %}
-          <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
-      </br><p>Already a User? <a href="{{ url_for('login') }}">Click to Login</a></p></br>
-      <p class="mt-5 mb-3 text-muted"><small>Copyright &copy; 2018</small></p>
-    </form>
-
-</body>
 {% endblock %}
