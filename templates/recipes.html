@@ -8,9 +8,9 @@
         <div class="col s12 m6 l4">
             <div class="card">
                 <div class="card-image">
-                    <img src="static/images/55470.jpg">
+                    <img class="responsive-img" width="300" height="300" src="static/images/55470.jpg">
                     <span class="card-title grey lighten-1"><strong>{{recipe.recipe_name}}</strong></span>
-                    <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+                    <a class="btn-floating halfway-fab waves-effect waves-light red" href="{{ url_for('view_recipe', recipe_id=recipe._id) }}"><i class="material-icons">add</i></a>
                 </div>
                 <div class="card-content">
                     <p><strong>Cook time: {{recipe.recipe_time}} minutes</strong></p>

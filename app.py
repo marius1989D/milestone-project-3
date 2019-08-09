@@ -125,6 +125,11 @@ def login():
 def get_recipe():
     return render_template('recipes.html', recipes=mongo.db.recipes.find())
     
+@app.route('/view_recipe/<recipe_id>')
+def view_recipe(recipe_id):
+    recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    return render_template('viewrecipe.html', recipe=recipe)
+    
 @app.route('/add_recipe')
 def add_recipe():
     return render_template('addrecipe.html',
