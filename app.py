@@ -6,10 +6,9 @@ from flask_mongoengine import MongoEngine, Document
 from werkzeug.urls import url_parse
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required, UserMixin 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, FieldList, FormField
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from flask_bcrypt import Bcrypt
 
 
@@ -34,6 +33,30 @@ class User(UserMixin, db.Document):
     username = db.StringField(max_length=15)
     email = db.StringField(max_length=30)
     password = db.StringField()
+    
+    def add_user(self, username, email, password):
+        user = mongo.db.users
+        extisting_user = user.find_one({"username": username, 'email': email})
+        
+        if extisting_user is None:
+            hashpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            user.insert(
+                {
+                    "username": username,
+                    "email": email,
+                    "password": hashpass
+                }
+            )
+            
+    
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
     
 @login_manager.user_loader
 def load_user(user_id):
@@ -79,13 +102,14 @@ def register():
         user.insert_one(request.form.to_dict())
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
+        
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated == True:
         return redirect(url_for('get_recipe'))
-    form = RegistrationForm()
+    form = LoginForm()
     if request.method == 'POST':
         if form.validate():
             check_user = User.objects(email=form.email.data).first()

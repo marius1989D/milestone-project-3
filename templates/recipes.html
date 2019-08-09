@@ -2,6 +2,67 @@
 
 <h3>Recipes</h3>
 
+<section class="section green lighten-4">
+    <div class="row">
+        {% for recipe in recipes %}
+        <div class="col s12 m6 l4">
+            <div class="card">
+                <div class="card-image">
+                    <img src="static/images/55470.jpg">
+                    <span class="card-title grey lighten-1"><strong>{{recipe.recipe_name}}</strong></span>
+                    <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+                </div>
+                <div class="card-content">
+                    <p><strong>Cook time: {{recipe.recipe_time}} minutes</strong></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<!--<div class="row">
+    {% for recipe in recipes %}
+    <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+            <ul class="collapsible popout">
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">filter_drama</i><strong>{{recipe.recipe_name}}</strong></div>
+                    <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                </li>
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">place</i>Ingredients</div>
+                    <div class="collapsible-body"><span>{{recipe.recipe_ingredients}}</span></div>
+                </li>
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">whatshot</i>Method</div>
+                    <div class="collapsible-body"><span>{{recipe.recipe_method}}</span></div>
+                </li>
+                <div class="card-action">
+                    <a href="{{url_for('edit_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn btn_edit"><i class="material-icons left">edit</i>Edit</a>
+                    <a href="{{url_for('delete_recipe' , recipe_id=recipe._id)}}" class="waves-effect waves-light btn btn_delete"><i class="material-icons deleteIcon">delete_forever</i></a>
+                </div>
+            </ul>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+
+
 <div class="row">
     <ul class="collapsible">
         {% for recipe in recipes %}
@@ -35,5 +96,5 @@
         </li>
         {% endfor %}
     </ul>
-</div>
+</div> -->
 {% endblock %}
