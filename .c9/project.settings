@@ -1,4 +1,7 @@
 {
+    "ace": {
+        "@tabSize": 4
+    },
     "instance": {
         "@automaticShutdown": "240"
     },
