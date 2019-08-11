@@ -165,6 +165,10 @@ def delete_recipe(recipe_id):
     mongo.db.recipes.remove({'_id': ObjectId(recipe_id)})
     return redirect(url_for('get_recipe'))
     
+@app.route('/search_recipe')
+def search_recipe():
+    return render_template("search.html", categories=mongo.db.recipe_category.find())
+    
 
     
 
