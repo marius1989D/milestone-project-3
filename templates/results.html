@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% block content %}
+
+<h3>Recipes</h3>
+
+<section class="section green lighten-4">
+    <div class="row">
+        {% for result in results %}
+        <div class="col s12 m6 l4">
+            <div class="card">
+                <div class="card-image">
+                    <img class="responsive-img" width="300" height="300" src="static/images/55470.jpg">
+                    <span class="card-title grey lighten-1"><strong>{{result.recipe_name}}</strong></span>
+                    <a class="btn-floating halfway-fab waves-effect waves-light red" href="{{ url_for('view_recipe', recipe_id=result._id) }}"><i class="material-icons">add</i></a>
+                </div>
+                <div class="card-content">
+                    <p><strong>Cook time: {{result.recipe_time}} minutes</strong></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

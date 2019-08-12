@@ -167,16 +167,18 @@ def delete_recipe(recipe_id):
     
 @app.route('/search_recipe')
 def search_recipe():
-    return render_template("search.html", categories=mongo.db.recipe_category.find())
+    return render_template("search.html", categories=mongo.db.recipes.find())
+    
+@app.route('/get_results', methods = ['POST', 'GET'])
+def get_results():
+    recipes = mongo.db.recipes
+    recipe_category = request.form.get('recipe_category')
+    results = recipes.find({'recipe_category': recipe_category})
+    return render_template('results.html', results=results)
     
 
-    
 
 
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
 
 
     
