@@ -36,11 +36,16 @@ login_manager = LoginManager(app)
 def get_recipe():
     return render_template('recipes.html', recipes=mongo.db.recipes.find())
     
+    
+    
+    
 @app.route('/view_recipe/<recipe_id>')
 def view_recipe(recipe_id):
-    last_updated = datetime.datetime.now()
+    last_updated = datetime.datetime.utcnow()
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
-    return render_template('viewrecipe.html', recipe=recipe, last_updated=last_updated)
+    return render_template('viewrecipe.html', recipe=recipe)
+    
+    
     
 @app.route('/add_recipe')
 def add_recipe():
@@ -63,13 +68,15 @@ def edit_recipe(recipe_id):
 @app.route('/update_recipe/<recipe_id>', methods = ["POST"])
 def update_recipe(recipe_id):
     recipes = mongo.db.recipes
+    datetime_now = datetime.datetime.utcnow()
     recipes.update( {'_id': ObjectId(recipe_id)},
     {
         'recipe_category' : request.form.get('recipe_category'),
         'recipe_name' : request.form.get('recipe_name'),
         'recipe_ingredients' : request.form.get('recipe_ingredients'),
         'recipe_method' : request.form.get('recipe_method'),
-        'recipe_time' : request.form.get('recipe_time')
+        'recipe_time' : request.form.get('recipe_time'),
+        'last_updated': datetime_now
     })
     return redirect(url_for('get_recipe'))
     

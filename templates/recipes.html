@@ -13,7 +13,8 @@
                     <a class="btn-floating halfway-fab waves-effect waves-light red" href="{{ url_for('view_recipe', recipe_id=recipe._id) }}"><i class="material-icons">add</i></a>
                 </div>
                 <div class="card-content">
-                    <p><strong>Cook time: {{recipe.recipe_time}} minutes</strong></p>
+                    <p><strong>Cook time: {{recipe.recipe_time}} minutes</strong> </p>
+                    <p><strong>Last updated: {{ recipe.last_updated }} </strong></p>
                 </div>
             </div>
         </div>
