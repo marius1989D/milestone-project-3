@@ -1,4 +1,5 @@
 import os
+import datetime
 from flask import Flask, render_template, redirect, request, url_for, flash, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
@@ -28,96 +29,6 @@ db = MongoEngine(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
-class User(UserMixin, db.Document):
-    meta = {'collection': 'users'}
-    username = db.StringField(max_length=15)
-    email = db.StringField(max_length=30)
-    password = db.StringField()
-    
-    def add_user(self, username, email, password):
-        user = mongo.db.users
-        extisting_user = user.find_one({"username": username, 'email': email})
-        
-        if extisting_user is None:
-            hashpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            user.insert(
-                {
-                    "username": username,
-                    "email": email,
-                    "password": hashpass
-                }
-            )
-            
-    
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-    
-@login_manager.user_loader
-def load_user(user_id):
-    return User.objects(pk=user_id).first()
-    
-    
-class RegistrationForm(FlaskForm):
-    username = StringField('Username',
-                           validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password',
-                                     validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Sign Up')
-    
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
-            raise ValidationError('That username is taken. Please choose a different one.')
-
-    def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user:
-            raise ValidationError('That email is taken. Please choose a different one.')
-
-
-class LoginForm(FlaskForm):
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
-    
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('get_recipe'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
-        user.insert_one(request.form.to_dict())
-        flash('Your account has been created! You are now able to log in', 'success')
-        return redirect(url_for('login'))
-        
-    return render_template('register.html', title='Register', form=form)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated == True:
-        return redirect(url_for('get_recipe'))
-    form = LoginForm()
-    if request.method == 'POST':
-        if form.validate():
-            check_user = User.objects(email=form.email.data).first()
-            if check_user:
-                if check_password_hash(check_user['password'], form.password.data):
-                    login_user(check_user)
-                    return redirect(url_for('get_recipe'))
-    return render_template('login.html', form=form)
 
 
 @app.route('/')
@@ -127,8 +38,9 @@ def get_recipe():
     
 @app.route('/view_recipe/<recipe_id>')
 def view_recipe(recipe_id):
+    last_updated = datetime.datetime.now()
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
-    return render_template('viewrecipe.html', recipe=recipe)
+    return render_template('viewrecipe.html', recipe=recipe, last_updated=last_updated)
     
 @app.route('/add_recipe')
 def add_recipe():
@@ -137,9 +49,10 @@ def add_recipe():
                            
 @app.route('/insert_recipe', methods=['POST'])
 def insert_recipe():
+    last_updated = datetime.datetime.now()
     recipes =  mongo.db.recipes
     recipes.insert_one(request.form.to_dict())
-    return redirect(url_for('get_recipe'))
+    return redirect(url_for('get_recipe', last_updated=last_updated))
     
 @app.route('/edit_recipe/<recipe_id>', methods=['POST', 'GET'])
 def edit_recipe(recipe_id):
