@@ -41,7 +41,6 @@ def get_recipe():
     
 @app.route('/view_recipe/<recipe_id>')
 def view_recipe(recipe_id):
-    last_updated = datetime.datetime.utcnow()
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
     return render_template('viewrecipe.html', recipe=recipe)
     
@@ -54,10 +53,17 @@ def add_recipe():
                            
 @app.route('/insert_recipe', methods=['POST'])
 def insert_recipe():
-    last_updated = datetime.datetime.now()
     recipes =  mongo.db.recipes
     recipes.insert_one(request.form.to_dict())
-    return redirect(url_for('get_recipe', last_updated=last_updated))
+    return redirect(url_for('get_recipe'))
+    
+@app.route('/recipe_photo', methods=['POST'])
+def recipe_photo():
+    if 'recipe_photo' in request.files:
+        recipe_photo = request.files['recipe_photo']
+        mongo.save_file(recipe_photo)
+        mongo.db.recipes.insert({'recipe_photo': recipe_photo})
+    return mongo.send_file(recipe_photo)
     
 @app.route('/edit_recipe/<recipe_id>', methods=['POST', 'GET'])
 def edit_recipe(recipe_id):
@@ -76,6 +82,7 @@ def update_recipe(recipe_id):
         'recipe_ingredients' : request.form.get('recipe_ingredients'),
         'recipe_method' : request.form.get('recipe_method'),
         'recipe_time' : request.form.get('recipe_time'),
+        'recipe_photo': request.form.get('recipe_photo'),
         'last_updated': datetime_now
     })
     return redirect(url_for('get_recipe'))
