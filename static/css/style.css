@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Lexend+Exa|Noto+Serif:700i&display=swap');
+
+
+
+/*-------------Navigation ------*/
+#my-nav {
+    font-family: 'Noto Serif', serif;
+    background-color: #48343480; 
+}
+
+nav ul a {
+    color: #000000de;
+    font-size: 1.5rem;
+}
+
+.side-nav li>a {
+    font-size: 17px;
+    color: #444;
+}

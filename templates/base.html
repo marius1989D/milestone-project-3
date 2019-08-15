@@ -8,13 +8,13 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-    <link rel="stylesheet" href="{{url_for('static', filename=" css/style.css ")}}" type="text/css" />
+    <link rel="stylesheet" href="{{url_for('static', filename="css/style.css")}}" type="text/css" />
     <title>Tasty Things</title>
 </head>
 
 <body>
     <div class="navbar-fixed">
-        <nav>
+        <nav id="my-nav">
             <div class="nav-wrapper">
                 <a href="{{url_for('get_recipe') }}" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                 <a href="{{url_for('get_recipe') }}" class="brand-logo">Page Title</a>
