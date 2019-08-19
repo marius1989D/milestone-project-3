@@ -1,11 +1,28 @@
 @import url('https://fonts.googleapis.com/css?family=Lexend+Exa|Noto+Serif:700i&display=swap');
 
+html {
+    font-family: 'Noto Serif', serif;
+}
 
+
+
+
+
+/*-------------Fonts----------*/
+
+.noto-serif {
+    font-family: 'Noto Serif', serif;
+}
+
+.lexend-exa {
+    font-family: 'Lexend Exa', sans-serif;
+}
 
 /*-------------Navigation ------*/
-#my-nav {
-    font-family: 'Noto Serif', serif;
-    background-color: #48343480; 
+
+.my-nav {
+
+    background-color: #e3f2fdcc;
 }
 
 nav ul a {
@@ -16,4 +33,20 @@ nav ul a {
 .side-nav li>a {
     font-size: 17px;
     color: #444;
+}
+
+.button-collapse {
+    color: #000;
+}
+
+/*-------------Buttons ------*/
+
+.btn-md {
+    font-size: 2rem !important;
+}
+
+.btn,
+.btn_color {
+    color: #444;
+    background-color: #e3f2fdcc
 }
