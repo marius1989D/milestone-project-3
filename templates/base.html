@@ -10,37 +10,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <link rel="stylesheet" href="{{url_for('static', filename="css/style.css")}}" type="text/css" />
     <title>Tasty Things</title>
+
 </head>
 
 <body>
-    <div class="navbar-fixed">
-        <nav id="my-nav">
-            <div class="nav-wrapper">
-                <a href="{{url_for('get_recipe') }}" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-                <a href="{{url_for('get_recipe') }}" class="brand-logo">Page Title</a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a class="waves-effect" href="{{url_for('get_recipe') }}">Home</a></li>
-                    <li><a class="waves-effect" href="{{url_for('add_recipe') }}">Add Recipe</a></li>
-                    <li><a class="waves-effect" href="{{url_for('search_recipe') }}">Search Recipe</a></li>
-                </ul>
+    <header>
+        <div class="navbar-fixed">
+            <nav class="my-nav">
+                <div class="nav-wrapper">
+                    <a href="{{url_for('get_recipe') }}" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                    <a href="{{url_for('get_recipe') }}" class="brand-logo"><img src="{{url_for('static', filename="images/logo.png")}}" height="63.99px" width="150px"></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a class="waves-effect" href="{{url_for('get_recipe') }}">Home</a></li>
+                        <li><a class="waves-effect" href="{{url_for('add_recipe') }}">Add Recipe</a></li>
+                        <li><a class="waves-effect" href="{{url_for('search_recipe') }}">Search Recipe</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <ul class="side-nav" id="mobile-demo">
+            <li>
+                <a href="##">
+                    <center>MENU</center>
+                </a>
+            </li>
+            <li><a class="waves-effect" href="{{url_for('get_recipe') }}">Home</a></li>
+            <li><a class="waves-effect" href="{{url_for('add_recipe') }}">Add Recipe</a></li>
+            <li><a class="waves-effect" href="{{url_for('search_recipe') }}">Search Recipe</a></li>
+        </ul>
+    </header>
+    <main>
+        {% block content %} {% endblock %}
+    </main>
+    <footer class="page-footer my-nav">
+        <div class="footer-copyright">
+            <div class="container btn_color">
+                © 2019 Marius G. Dumitru 
+                <a class="btn_color right" href="#!">Milestone Project for Code Institute</a>
             </div>
-        </nav>
-    </div>
-    <ul class="side-nav" id="mobile-demo">
-        <li>
-            <a href="##">
-                <center>MENU</center>
-            </a>
-        </li>
-        <li><a class="waves-effect" href="{{url_for('get_recipe') }}">Home</a></li>
-        <li><a class="waves-effect" href="{{url_for('add_recipe') }}">Add Recipe</a></li>
-        <li><a class="waves-effect" href="{{url_for('search_recipe') }}">Search Recipe</a></li>
-    </ul>
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">
-        {{ message }}
-    </div>
-    {% endfor %} {% endif %} {% endwith %} {% block content %} {% endblock %}
+        </div>
+    </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <script type="text/javascript">
