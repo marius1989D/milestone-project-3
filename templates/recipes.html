@@ -1,26 +1,28 @@
 {% extends 'base.html' %} {% block content %}
 
-<h3>Recipes</h3>
+<div class="container">
+    <h1>Cooking Ideas For When You're Not Sure What To Make!</h1>
 
-<section class="section">
-    <div class="row">
-        {% for recipe in recipes %}
-        <div class="col s12 m6 l4">
-            <div class="card">
-                <div class="card-image">
-                    <img class="materialboxed"  height="300" src="{{recipe.recipe_photo}}">
-                    <span class="card-title grey lighten-1"><strong>{{recipe.recipe_name}}</strong></span>
-                    <a class="btn-floating halfway-fab waves-effect waves-light red" href="{{ url_for('view_recipe', recipe_id=recipe._id) }}"><i class="material-icons">add</i></a>
-                </div>
-                <div class="card-content">
-                    <p><strong>Cook time: {{recipe.recipe_time}} minutes</strong> </p>
-                    <p><strong>Last updated: {{ recipe.last_updated }} </strong></p>
+    <section class="section">
+        <div class="row">
+            {% for recipe in recipes %}
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-image">
+                        <img class="materialboxed" height="300" src="{{recipe.recipe_photo}}" alt="Recipe Image">
+                        <span class="card-title"><strong>{{recipe.recipe_name}}</strong></span>
+                        <a class="btn-floating halfway-fab waves-effect waves-light green" href="{{ url_for('view_recipe', recipe_id=recipe._id) }}"><i class="material-icons btn-md">play_arrow</i></a>
+                    </div>
+                    <div class="card-content blue lighten-5">
+                        <p><strong>Cook time: {{recipe.recipe_time}} minutes</strong> </p>
+                        <p><strong>Last updated: {{ recipe.last_updated }} </strong></p>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-</section>
+    </section>
+</div>
 
 
 
