@@ -54,6 +54,8 @@ def add_recipe():
 @app.route('/insert_recipe', methods=['POST'])
 def insert_recipe():
     recipes =  mongo.db.recipes
+    #datetime_now = datetime.datetime.utcnow()
+    #current_date = datetime.datetime.strftime(datetime_now, '%b %d, %Y')
     recipes.insert_one(request.form.to_dict())
     return redirect(url_for('get_recipe'))
     
