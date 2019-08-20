@@ -59,8 +59,12 @@ nav ul a {
     background-color: #e3f2fdcc
 }
 
-
+/*-------------Backgrounds ------*/
 .bg-img {
    /*background-image: url('/static/images/view-bgr.jpg');*/
    background-color: #f5f5f5;
+}
+
+.better_view {
+    background-color: #e3f2fdcc;
 }
