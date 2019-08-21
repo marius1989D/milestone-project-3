@@ -3,15 +3,6 @@ import datetime
 from flask import Flask, render_template, redirect, request, url_for, flash, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-from flask_mongoengine import MongoEngine, Document
-from werkzeug.urls import url_parse
-from flask_login import LoginManager, login_user, current_user, logout_user, login_required, UserMixin 
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, FieldList, FormField
-from werkzeug.security import generate_password_hash, check_password_hash
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
-from flask_bcrypt import Bcrypt
-
 
 
 
@@ -24,10 +15,6 @@ app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 
 
 mongo = PyMongo(app)
-db = MongoEngine(app)
-bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)
-
 
 
 @app.route('/')
@@ -100,15 +87,6 @@ def get_results():
     results = recipes.find({'recipe_category': recipe_category})
     return render_template('results.html', results=results)
     
-
-
-
-
-
-    
-
-
-
     
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
