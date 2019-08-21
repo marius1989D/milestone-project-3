@@ -6,14 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <!---------Materialize CDN's ----->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    
+    <!---------Local CSS ----->
     <link rel="stylesheet" href="{{url_for('static', filename="css/style.css")}}" type="text/css" />
+    
     <title>Tasty Things</title>
 
 </head>
 
 <body>
+    <!---------Navigationa ----->
     <header>
         <div class="navbar-fixed">
             <nav class="my-nav">
@@ -39,9 +44,14 @@
             <li><a class="waves-effect" href="{{url_for('search_recipe') }}">Search Recipe</a></li>
         </ul>
     </header>
+    
+    
+    <!---------Page content ----->
     <main class="bg-img">
         {% block content %} {% endblock %}
     </main>
+    
+    <!---------Footer ----->
     <footer class="page-footer my-nav">
         <div class="footer-copyright">
             <div class="container btn_color">
@@ -50,14 +60,18 @@
             </div>
         </div>
     </footer>
+    
+    <!---------JavaScript and jQuery CDN's ----->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    
+    <!---------Controls the behaviour of Navbar and Collapsible elements ----->
     <script type="text/javascript">
         $(document).ready(function() {
             $('.collapsible').collapsible();
             $('select').material_select();
 
-            $('.button-collapse').sideNav({
+            $('.button-collapse').sideNav({ //this is just a little trick that fixes Materialize's bug with navbar not collapsing 
                 closeOnClick: true
             });
         });
